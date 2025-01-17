@@ -2,6 +2,9 @@
 
 Add a Github notification widget to your tmux status line.
 
+![image](https://github.com/user-attachments/assets/61043f42-984f-4e68-ae81-3645fca2e85b)
+
+
 ## Installation
 
 Clone the repo:
