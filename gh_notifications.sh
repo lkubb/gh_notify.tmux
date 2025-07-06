@@ -2,9 +2,21 @@
 
 set -e
 
+tmux_option() {
+  local -r value=$(tmux show-option -gqv gh_notifications_"$1") \
+  default="$2"
+
+  if [[ -n "$value" ]]; then
+    echo "$value"
+  else
+    echo "$default"
+  fi
+}
+
 cache_file="${XDG_CACHE_HOME:-$HOME/.cache}/tmux_gh_notifications"
-refresh_interval="$(tmux show-option -gqv '@gh_notifications_refresh_interval')"
-refresh_interval="${refresh_interval:-60}"
+refresh_interval="$(tmux_option refresh_interval 60)"
+fg_color="$(tmux_option fg_color colour0)"
+bg_color="$(tmux_option bg_color colour7)"
 
 # BSD stat uses a different interface than the GNU coreutils one
 if [[ "$OSTYPE" != darwin* ]]; then
@@ -29,7 +41,7 @@ else
 fi
 
 if ((notifications > 0)); then
-  echo -n '#[fg=colour7]#[default]'
-  echo -n "#[bg=colour7,fg=colour0,bold] $notifications#[default]"
-  echo -n '#[fg=colour7]#[default]'
+  echo -n "#[fg=${bg_color}]#[default]"
+  echo -n "#[bg=${bg_color},fg=${fg_color},bold] $notifications#[default]"
+  echo -n "#[fg=${bg_color}]#[default]"
 fi
